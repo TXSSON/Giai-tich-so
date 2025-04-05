@@ -15,7 +15,7 @@ def f2(x):
 a = -1.5
 b = -1
 eps = 1e-7
-N0 = 100
+N0 = 15
 
 # Kiểm tra điều kiện định lý 2.4
 if f(a) * f2(a) > 0:
@@ -37,17 +37,18 @@ i = 0
 x_old = x0
 table = []
 
-while i <= N0:
+while i < N0:
     x_new = x_old - f(x_old) / f1(x_old)
     dx = abs(x_new - x_old)
     
     table.append([i, x_old, dx])
     
     if dx < epsilon:
+        i += 1
         break
     i += 1
     x_old = x_new
-table.append([i+1, x_new, ""])
+table.append([i, x_new, ""])
 
 # In bảng kết quả dạng grid
 headers = ["Lần lặp (k)", "x_k", "|x_k - x_{k-1}|"]
@@ -55,4 +56,3 @@ print(tabulate(table, headers=headers, tablefmt="grid", floatfmt=".10f"))
 
 # In kết luận
 print("\nNghiệm gần đúng là:", f"{x_new:.10f}")
-print("Tổng số bước lặp:", i)
