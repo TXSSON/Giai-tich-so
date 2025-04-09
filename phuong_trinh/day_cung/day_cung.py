@@ -70,18 +70,18 @@ def secant_method(f, df, ddf, a, b, epsilon, N0):
 # Hàm ví dụ
 
 def f(x):
-    return x**3 -1.5*x**2 + 0.58*x - 0.057
+    return x**3 - 2*x -5
 
 def df(x):
-    return 3 * x**2 - 3*x + 0.58
+    return 3*x**2 - 2
 
 def ddf(x):
-    return 6*x - 3
+    return 6*x
 
 # Thông số đầu vào
-a = 0
-b = 0.22
-epsilon = 5e-3
+a = 2.0
+b = 3.0
+epsilon = 1e-8
 N0 = 100
 
 # Gọi hàm tìm nghiệm
