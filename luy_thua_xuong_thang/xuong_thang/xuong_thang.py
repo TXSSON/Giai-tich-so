@@ -55,10 +55,14 @@ def compute_all_eigenpairs(A, x0, tol=1e-6, max_iter=5):
         eigenvalues.append(lam)
         eigenvectors.append(v)
         print(f"\n→ Ghi nhận trị riêng λ{k+1} ≈ {round(lam, 6)}")
-        if k < n - 1:
-            A = deflation(A, lam, v)
-    return eigenvalues, eigenvectors
 
+        if k < n - 1:
+            print("\n→ Ma trận trước khi xuống thang:")
+            print(A)
+            A = deflation(A, lam, v)
+            print("→ Ma trận sau khi xuống thang (A - λ vvᵀ):")
+            print(A)
+    return eigenvalues, eigenvectors
 
 # Gọi hàm chính
 eigenvalues, eigenvectors = compute_all_eigenpairs(A, x0)
