@@ -1,6 +1,8 @@
 import numpy as np
 from tabulate import tabulate
 
+DECIMALS = 7
+
 def read_input(filename):
     with open(filename, 'r') as f:
         lines = f.readlines()
@@ -16,7 +18,7 @@ def simple_iteration_method(B, d, x0, TOL, N):
     q = np.linalg.norm(B, ord=np.inf)
     if q >= 1:
         raise ValueError(f"Không thỏa mãn điều kiện hội tụ: ||B|| = {q:.3f} ≥ 1")
-    print(f"Thỏa mãn điều kiện hội tụ: ||B|| = {q:.3f} ≥ 1")
+    print(f"Thỏa mãn điều kiện hội tụ: ||B|| = {q:.{DECIMALS}f} <= 1")
 
     tol = TOL * (1 - q) / q
     k = 1
@@ -52,7 +54,7 @@ def main():
         x_final, k, logs, abs_err, rel_err, post_err, pre_err = simple_iteration_method(B, d, x0, TOL, N)
 
         print("📘 Quá trình lặp:")
-        print(tabulate(logs, headers=["Lần lặp", "x1", "x2", "x3"], floatfmt=".6f", tablefmt="fancy_grid"))
+        print(tabulate(logs, headers=["Lần lặp"] + [f"x{i + 1}" for i in range(len(x0))], floatfmt=f".{DECIMALS}f", tablefmt="fancy_grid"))
 
         print("\n🔎 Nghiệm gần đúng cuối cùng:", x_final)
         print("🔁 Số lần lặp:", k)
@@ -63,7 +65,7 @@ def main():
             ["Sai số tương đối", rel_err],
             ["Sai số hậu nghiệm (CT 3.3)", post_err],
             ["Sai số tiên nghiệm (CT 3.2)", pre_err],
-        ], headers=["Loại sai số", "Giá trị"], floatfmt=".6e", tablefmt="fancy_grid"))
+        ], headers=["Loại sai số", "Giá trị"], floatfmt=f".{DECIMALS}e", tablefmt="fancy_grid"))
 
     except ValueError as e:
         print(e)
