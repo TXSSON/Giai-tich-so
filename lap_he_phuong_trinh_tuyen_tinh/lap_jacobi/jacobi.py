@@ -1,6 +1,8 @@
 import numpy as np
 from tabulate import tabulate
 
+DECIMALS = 7
+
 def read_input(filename):
     with open(filename, 'r') as f:
         lines = f.readlines()
@@ -13,7 +15,6 @@ def read_input(filename):
     return A, b, x0, TOL, N
 
 # Bước 1.1 + 1.2: Kiểm tra tính chéo trội và tính q, lambda theo trường hợp
-
 def kiem_tra_cheo_troi_va_tinh_q_lambda(A):
     import sys
 
@@ -78,11 +79,11 @@ def jacobi_theo_sach(A, b, x0, TOL, N):
     ord_type = np.inf if cheo == 'row' else 1
 
     print("\n📏 A là ma trận chéo trội theo:", "HÀNG" if cheo == 'row' else "CỘT")
-    print(f"q = {q:.7f}, lambda = {lam:.7f}")
+    print(f"q = {q:.{DECIMALS}f}, lambda = {lam:.{DECIMALS}f}")
 
     # Bước 2: TOL'
     tol = TOL * (1 - q) / (lam * q)
-    print(f"epsilon = {tol:.7f}")
+    print(f"epsilon = {tol:.{DECIMALS}f}")
 
     # Bước 3
     k = 1
@@ -103,6 +104,7 @@ def jacobi_theo_sach(A, b, x0, TOL, N):
             x_first = x_new.copy()
             # Dự đoán số vòng lặp
             du_doan_vong_lap = np.log((TOL * (1 - q)) / (np.linalg.norm(x_first - x0, ord=ord_type))) / np.log(q)
+            print(f"Cần lớn hơn: {du_doan_vong_lap}")
             du_doan_vong_lap = int(np.ceil(du_doan_vong_lap))
             print(f"📈 Dự đoán số vòng lặp cần thiết: {du_doan_vong_lap}")
 
@@ -131,7 +133,7 @@ def main():
 
 
         print("\n📘 Quá trình lặp Jacobi:")
-        print(tabulate(logs, headers=["Lần lặp"] + [f"x{i + 1}" for i in range(len(x0))] + ["Sai số"], floatfmt=".7f",
+        print(tabulate(logs, headers=["Lần lặp"] + [f"x{i + 1}" for i in range(len(x0))] + ["Sai số"], floatfmt=f".{DECIMALS}f",
                        tablefmt="fancy_grid"))
 
         print("\n🔎 Nghiệm gần đúng cuối cùng:", x_final)
@@ -143,7 +145,7 @@ def main():
             ["Sai số tương đối", rel_err],
             ["Sai số hậu nghiệm (3.3)", post_err],
             ["Sai số tiên nghiệm (3.2)", pre_err],
-        ], headers=["Loại sai số", "Giá trị"], floatfmt=".7e", tablefmt="fancy_grid"))
+        ], headers=["Loại sai số", "Giá trị"], floatfmt=f".{DECIMALS}e", tablefmt="fancy_grid"))
 
     except ValueError as e:
         print("❌ Lỗi:", e)
