@@ -78,11 +78,11 @@ def jacobi_theo_sach(A, b, x0, TOL, N):
     ord_type = np.inf if cheo == 'row' else 1
 
     print("\n📏 A là ma trận chéo trội theo:", "HÀNG" if cheo == 'row' else "CỘT")
-    print(f"q = {q:.6f}, lambda = {lam:.6f}")
+    print(f"q = {q:.7f}, lambda = {lam:.7f}")
 
     # Bước 2: TOL'
     tol = TOL * (1 - q) / (lam * q)
-    print(f"epsilon = {tol:.6f}")
+    print(f"epsilon = {tol:.7f}")
 
     # Bước 3
     k = 1
@@ -131,7 +131,7 @@ def main():
 
 
         print("\n📘 Quá trình lặp Jacobi:")
-        print(tabulate(logs, headers=["Lần lặp"] + [f"x{i + 1}" for i in range(len(x0))] + ["Sai số"], floatfmt=".6f",
+        print(tabulate(logs, headers=["Lần lặp"] + [f"x{i + 1}" for i in range(len(x0))] + ["Sai số"], floatfmt=".7f",
                        tablefmt="fancy_grid"))
 
         print("\n🔎 Nghiệm gần đúng cuối cùng:", x_final)
@@ -143,7 +143,7 @@ def main():
             ["Sai số tương đối", rel_err],
             ["Sai số hậu nghiệm (3.3)", post_err],
             ["Sai số tiên nghiệm (3.2)", pre_err],
-        ], headers=["Loại sai số", "Giá trị"], floatfmt=".6e", tablefmt="fancy_grid"))
+        ], headers=["Loại sai số", "Giá trị"], floatfmt=".7e", tablefmt="fancy_grid"))
 
     except ValueError as e:
         print("❌ Lỗi:", e)
