@@ -15,6 +15,8 @@ def read_input(filename):
 # Bước 1.1 + 1.2: Kiểm tra tính chéo trội và tính q, lambda theo trường hợp
 
 def kiem_tra_cheo_troi_va_tinh_q_lambda(A):
+    import sys
+
     n = A.shape[0]
 
     row_dom = True
@@ -22,7 +24,6 @@ def kiem_tra_cheo_troi_va_tinh_q_lambda(A):
     strictly_row = False
     strictly_col = False
 
-    # Kiểm tra chéo trội theo hàng
     row_q_list = []
     for i in range(n):
         sum_off = sum(abs(A[i][j]) for j in range(n) if j != i)
@@ -32,7 +33,6 @@ def kiem_tra_cheo_troi_va_tinh_q_lambda(A):
             strictly_row = True
         row_q_list.append(sum_off / abs(A[i][i]))
 
-    # Kiểm tra chéo trội theo cột
     col_q_list = []
     for j in range(n):
         sum_off = sum(abs(A[i][j]) for i in range(n) if i != j)
@@ -42,14 +42,29 @@ def kiem_tra_cheo_troi_va_tinh_q_lambda(A):
             strictly_col = True
         col_q_list.append(sum_off / abs(A[j][j]))
 
-    if row_dom and strictly_row:
+    # Trường hợp cả hai đều thỏa mãn
+    if row_dom and strictly_row and col_dom and strictly_col:
+        while True:
+            choice = input("Ma trận chéo trội theo cả hàng và cột. Bạn muốn chọn kiểu nào? (row/col): ").strip().lower()
+            if choice == 'row':
+                q = max(row_q_list)
+                lam = 1
+                return q, lam, 'row'
+            elif choice == 'col':
+                q = max(col_q_list)
+                diagonals = [abs(A[i][i]) for i in range(n)]
+                lam = max(diagonals) / min(diagonals)
+                return q, lam, 'col'
+            else:
+                print("Lựa chọn không hợp lệ. Vui lòng nhập 'row' hoặc 'col'.")
+    elif row_dom and strictly_row:
         q = max(row_q_list)
-        lam = 1  # theo sách
+        lam = 1
         return q, lam, 'row'
     elif col_dom and strictly_col:
         q = max(col_q_list)
         diagonals = [abs(A[i][i]) for i in range(n)]
-        lam = max(diagonals) / min(diagonals)  # theo sách
+        lam = max(diagonals) / min(diagonals)
         return q, lam, 'col'
     else:
         raise ValueError("Ma trận A không chéo trội theo hàng hoặc cột. Không đảm bảo hội tụ theo Jacobi.")
