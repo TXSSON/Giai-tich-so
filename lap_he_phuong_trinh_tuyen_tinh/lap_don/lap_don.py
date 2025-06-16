@@ -17,7 +17,7 @@ def read_input(filename):
 def simple_iteration_method(B, d, x0, TOL, N):
     q = np.linalg.norm(B, ord=np.inf)
     if q >= 1:
-        raise ValueError(f"Không thỏa mãn điều kiện hội tụ: ||B|| = {q:.3f} ≥ 1")
+        raise ValueError(f"Không thỏa mãn điều kiện hội tụ: ||B|| = {q:.{DECIMALS}f} ≥ 1")
     print(f"Thỏa mãn điều kiện hội tụ: ||B|| = {q:.{DECIMALS}f} <= 1")
 
     tol = TOL * (1 - q) / q

@@ -61,10 +61,12 @@ def kiem_tra_cheo_troi_va_tinh_q_lambda(A):
             else:
                 print("Lựa chọn không hợp lệ. Vui lòng nhập 'row' hoặc 'col'.")
     elif row_dom and strictly_row:
+        print("row_q_list", row_q_list)
         q = max(row_q_list)
         lam = 1
         return q, lam, 'row'
     elif col_dom and strictly_col:
+        print("row_q_list", col_q_list)
         q = max(col_q_list)
         diagonals = [abs(A[i][i]) for i in range(n)]
         lam = max(diagonals) / min(diagonals)
