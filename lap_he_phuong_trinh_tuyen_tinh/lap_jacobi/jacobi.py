@@ -50,10 +50,12 @@ def kiem_tra_cheo_troi_va_tinh_q_lambda(A):
         while True:
             choice = input("Ma trận chéo trội theo cả hàng và cột. Bạn muốn chọn kiểu nào? (row/col): ").strip().lower()
             if choice == 'row':
+                print("row_q_list", row_q_list)
                 q = max(row_q_list)
                 lam = 1
                 return q, lam, 'row'
             elif choice == 'col':
+                print("col_q_list", col_q_list)
                 q = max(col_q_list)
                 diagonals = [abs(A[i][i]) for i in range(n)]
                 lam = max(diagonals) / min(diagonals)
