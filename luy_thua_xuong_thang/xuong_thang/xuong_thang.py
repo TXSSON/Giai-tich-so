@@ -1,7 +1,7 @@
 import numpy as np
 from luy_thua_xuong_thang.normalization import normalize_L2
 
-# Đọc dữ liệu từ file input.txt
+# Đọc dữ liệu từ file input.txt.txt
 with open("input.txt", "r") as f:
     n = int(f.readline())
     x0 = np.array([float(i) for i in f.readline().split()]).reshape(n, 1)
@@ -9,7 +9,7 @@ with open("input.txt", "r") as f:
 
 
 # Phương pháp lũy thừa có in chi tiết
-def power_method_verbose(A, x0, tol=1e-6, max_iter=1000):
+def power_method_verbose(A, x0, tol=1e-2, max_iter=1000):
     x = normalize_L2(x0)
     print("=== BẮT ĐẦU PHƯƠNG PHÁP LŨY THỪA ===")
     for i in range(max_iter):

@@ -149,7 +149,7 @@ def solve_gauss(A, b):
     result = gauss_back(gauss_elimination_matrix, m, n)
     print(result)
 def main():
-    # Tên file input
+    # Tên file input.txt
     filename = "augmented_matrix.txt"
     A, b = read_augmented_matrix_from_file(filename)
     solve_gauss(A, b)

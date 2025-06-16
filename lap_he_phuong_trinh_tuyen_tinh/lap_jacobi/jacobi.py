@@ -1,3 +1,5 @@
+from fractions import Fraction
+
 import numpy as np
 from tabulate import tabulate
 
@@ -70,6 +72,42 @@ def kiem_tra_cheo_troi_va_tinh_q_lambda(A):
     else:
         raise ValueError("Ma trận A không chéo trội theo hàng hoặc cột. Không đảm bảo hội tụ theo Jacobi.")
 
+def float_to_fraction_str(x, max_denominator=10000):
+    try:
+        frac = Fraction(x).limit_denominator(max_denominator)
+        # Nếu là số nguyên, chỉ in số nguyên
+        if frac.denominator == 1:
+            return str(frac.numerator)
+        return f"{frac.numerator}/{frac.denominator}"
+    except:
+        return str(x)
+
+def print_matrix_fraction(mat, name):
+    print(f"\n{name} = ")
+    rows = []
+    for row in mat:
+        rows.append([float_to_fraction_str(x) for x in row])
+    print(tabulate(rows, tablefmt="fancy_grid"))
+
+def print_vector_fraction(vec, name):
+    print(f"\n{name} = ")
+    for x in vec:
+        print(float_to_fraction_str(x))
+
+def ma_tran_sau_khi_bien_doi(A, b):
+    n = len(b)
+    B = np.zeros_like(A)
+    d = np.zeros(n)
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                B[i][j] = 0
+            else:
+                B[i][j] = -A[i][j] / A[i][i]
+        d[i] = b[i] / A[i][i]
+    return B, d
+
+
 def jacobi_theo_sach(A, b, x0, TOL, N):
     global err, x_new
     n = A.shape[0]
@@ -80,6 +118,10 @@ def jacobi_theo_sach(A, b, x0, TOL, N):
 
     print("\n📏 A là ma trận chéo trội theo:", "HÀNG" if cheo == 'row' else "CỘT")
     print(f"q = {q:.{DECIMALS}f}, lambda = {lam:.{DECIMALS}f}")
+
+    B, d = ma_tran_sau_khi_bien_doi(A, b)
+    print_matrix_fraction(B, "B")
+    print_vector_fraction(d, "d")
 
     # Bước 2: TOL'
     tol = TOL * (1 - q) / (lam * q)
