@@ -1,4 +1,6 @@
 import numpy as np
+from tabulate import tabulate
+
 from luy_thua_xuong_thang.normalization import normalize_L2
 
 # Đọc dữ liệu từ file input.txt.txt
@@ -9,7 +11,7 @@ with open("input.txt", "r") as f:
 
 
 # Phương pháp lũy thừa có in chi tiết
-def power_method_verbose(A, x0, tol=1e-2, max_iter=1000):
+def power_method_verbose(A, x0, tol=1e-6, max_iter=1000):
     x = normalize_L2(x0)
     print("=== BẮT ĐẦU PHƯƠNG PHÁP LŨY THỪA ===")
     for i in range(max_iter):
@@ -22,12 +24,13 @@ def power_method_verbose(A, x0, tol=1e-2, max_iter=1000):
         print(x_new)
         diff = np.linalg.norm(x_new - x)
         print(f"→ Sai số ||x_k+1 - x_k|| = {diff:.6e}")
+        lam = float(((x.T @ A @ x) / (x.T @ x))[0, 0])
+        print(f"lamda = {lam}")
         if diff < tol:
             print(f"✅ Hội tụ sau {i + 1} bước (sai số < {tol})")
             break
         x = x_new
 
-    lam = float(((x.T @ A @ x) / (x.T @ x))[0, 0])
     print("\n🎯 KẾT QUẢ LŨY THỪA")
     print(f"→ Giá trị riêng gần đúng: λ ≈ {round(lam, 6)}")
     print("→ Véc-tơ riêng tương ứng:")
@@ -72,3 +75,9 @@ print("\n===== TỔNG KẾT CUỐI CÙNG =====")
 for i, (lam, v) in enumerate(zip(eigenvalues, eigenvectors), start=1):
     print(f"\nλ{i} ≈ {round(lam, 6)}")
     print(f"v{i}.T = {v.T}")
+
+# In giá trị kỳ dị (singular values)
+print("Giá trị kỳ dị là :", [np.sqrt(x) for x in eigenvalues])
+
+# In eigenvectors đẹp
+print(tabulate(eigenvectors, tablefmt="fancy_grid"))

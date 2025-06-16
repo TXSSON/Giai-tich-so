@@ -1,7 +1,5 @@
 import numpy as np
 from fractions import Fraction
-
-import sympy
 from tabulate import tabulate
 
 def read_matrix(filename):
@@ -91,7 +89,6 @@ def get_eigenvectors(transforms, eigenvalue):
     P = np.eye(n, dtype=object)
     for Mk in transforms:
         P = P @ Mk
-    # SỬA DÒNG NÀY: Dùng sympy để nghịch đảo phân số
     P_sym = sympy.Matrix(P)
     P_inv = P_sym.inv()
     Y_sym = sympy.Matrix(Y)
