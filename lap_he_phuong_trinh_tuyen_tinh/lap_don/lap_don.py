@@ -14,7 +14,7 @@ def read_input(filename):
     N = int(lines[n + 4])
     return B, d, x0, TOL, N
 
-def simple_iteration_method(B, d, x0, TOL, N):
+def simple_iteration_method(B, d, x0, TOL, N, stop_condition="absolute"):
     q = np.linalg.norm(B, ord=np.inf)
     if q >= 1:
         raise ValueError(f"Không thỏa mãn điều kiện hội tụ: ||B|| = {q:.{DECIMALS}f} ≥ 1")
@@ -33,8 +33,27 @@ def simple_iteration_method(B, d, x0, TOL, N):
         if k == 1:
             x_first = x_new.copy()
 
-        err_abs = np.linalg.norm(x_new - x_prev, ord=np.inf)
-        if err_abs <= tol:
+        # Tính các loại sai số
+        abs_err = np.linalg.norm(x_new - x_prev, ord=np.inf)
+        rel_err = abs_err / np.linalg.norm(x_new, ord=np.inf)
+        post_err = (q / (1 - q)) * abs_err
+        pre_err = (q ** k / (1 - q)) * np.linalg.norm(x_first - x0, ord=np.inf)
+
+        print(f"Lặp lần {k}")
+        print(f"sai số tuyệt đối:{abs_err}")
+        print(f"sai số tương đối:{rel_err}")
+        print(f"sai số hậu nghiệm:{post_err}")
+        print(f"sai số tiên nghiệm:{pre_err}")
+        print ("----------------------")
+
+        # Điều kiện dừng dựa trên loại sai số
+        if stop_condition == "absolute" and abs_err <= tol:
+            break
+        elif stop_condition == "relative" and rel_err <= tol:
+            break
+        elif stop_condition == "post" and post_err <= tol:
+            break
+        elif stop_condition == "pre" and pre_err <= tol:
             break
 
         x_prev = x_new
@@ -50,8 +69,11 @@ def simple_iteration_method(B, d, x0, TOL, N):
 
 def main():
     B, d, x0, TOL, N = read_input("input.txt")
+
+    stop_condition = input("Chọn điều kiện dừng (absolute/relative/post/pre): ").lower()
+
     try:
-        x_final, k, logs, abs_err, rel_err, post_err, pre_err = simple_iteration_method(B, d, x0, TOL, N)
+        x_final, k, logs, abs_err, rel_err, post_err, pre_err = simple_iteration_method(B, d, x0, TOL, N, stop_condition)
 
         print("📘 Quá trình lặp:")
         print(tabulate(logs, headers=["Lần lặp"] + [f"x{i + 1}" for i in range(len(x0))], floatfmt=f".{DECIMALS}f", tablefmt="fancy_grid"))
